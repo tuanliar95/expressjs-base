@@ -13,6 +13,7 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const sequelize = require('./config/database');
 
 const app = express();
 
@@ -63,5 +64,14 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+sequelize
+  .sync({ alter: true, force: false }) // force: true drops and recreates the table
+  .then(() => {
+    console.log('Database synced and tables created');
+  })
+  .catch((err) => {
+    console.error('Error syncing the database:', err);
+  });
 
 module.exports = app;

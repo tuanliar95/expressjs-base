@@ -6,9 +6,12 @@ const logger = require('./config/logger');
 
 let server;
 var con = mysql.createConnection(config.mysql);
-con.connect(function(err) {
+con.connect(function (err) {
   if (err) throw err;
-  console.log("MySQL Connected!!!")
+  console.log('MySQL Connected!!!');
+  server = app.listen(config.port, () => {
+    logger.info(`Listening to port ${config.port}`);
+  });
 });
 // mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
 //   logger.info('Connected to MongoDB');

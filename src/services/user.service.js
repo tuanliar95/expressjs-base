@@ -24,7 +24,13 @@ const createUser = async (userBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+  const optionss = {
+    page: options.page, // Page number
+    paginate: options.limit, // Items per page
+    // order: [[options.sort, 'DESC']], // Optional sorting
+    where: filter, // Optional condition
+  };
+  const users = await User.paginate(optionss);
   return users;
 };
 
@@ -34,7 +40,7 @@ const queryUsers = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  return User.findById(id);
+  return User.findByPk(id);
 };
 
 /**
@@ -43,7 +49,7 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+  return User.findOne({ where: { email } });
 };
 
 /**
